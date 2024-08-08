@@ -12,8 +12,8 @@ const Dashboard = () => {
   }
   return(
     <Card className="profile-card">
-      <Flex vertical gap="smal" align="center">
-        <Avatar size={150} icon={<UserOutlined />} className="avatar"/>
+      <Flex vertical gap="small" align="center">
+        <Avatar size={80} icon={<UserOutlined />} className="avatar" />
         <Typography.Title 
           level={2}   
           strong 

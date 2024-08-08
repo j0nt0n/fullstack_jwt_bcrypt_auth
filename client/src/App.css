@@ -36,10 +36,14 @@ body{
 
 /* profile */
 .profile-card {
-  width: 500px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 250px;
+  z-index: 1000;
 }
 .avatar {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 .username {
   text-transform: capitalize;
@@ -47,4 +51,5 @@ body{
 .profile-btn {
   margin-top: 1.3rem;
   width: 100%;
+}
 }
