@@ -52,3 +52,8 @@ body{
   margin-top: 1.3rem;
   width: 100%;
 }
+#map {
+  margin-top: 20px;
+  width: 600px;
+  height: 400px;
+}
