@@ -2,7 +2,9 @@ import React from 'react';
 import { Avatar, Button, Card, Flex, Typography } from 'antd';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { UserOutlined } from "@ant-design/icons";
-import YandexMap from '../yandexMap/YandexMap.jsx'; // Импортируем компонент карты
+import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+
+const mapState = { center: [55.76, 37.64], zoom: 10 };
 
 const Dashboard = () => {
   const { userData, logout} = useAuth();
@@ -40,7 +42,26 @@ const Dashboard = () => {
         </Flex>
       </Card>
 
-      <YandexMap /> {/* Встраиваем компонент карты */}
+      <YMaps>
+        <Map state={mapState}>
+
+          <Placemark
+            geometry={{
+            coordinates: [55.751574, 37.573856]
+          }}
+            properties={{
+            hintContent: 'Собственный значок метки',
+            balloonContent: 'Это красивая метка'
+          }}
+            options={{
+            iconLayout: 'default#image',
+            iconImageHref: 'images/myIcon.gif',
+            iconImageSize: [30, 42],
+            iconImageOffset: [-3, -42]
+          }}
+          />
+        </Map>
+        </YMaps>
     </div>
   ); 
 };
