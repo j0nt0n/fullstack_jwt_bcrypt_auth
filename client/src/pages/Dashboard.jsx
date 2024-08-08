@@ -44,7 +44,7 @@ const Dashboard = () => {
 
       <Card className="yandex-map">
       <YMaps>
-        <Map state={mapState}>
+        <Map width="950px" height="750px" state={mapState}>
 
           <Placemark
             geometry={{
