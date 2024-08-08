@@ -42,6 +42,7 @@ const Dashboard = () => {
         </Flex>
       </Card>
 
+      <Card className="yandex-map">
       <YMaps>
         <Map state={mapState}>
 
@@ -61,7 +62,8 @@ const Dashboard = () => {
           }}
           />
         </Map>
-        </YMaps>
+      </YMaps>
+      </Card>
     </div>
   ); 
 };
