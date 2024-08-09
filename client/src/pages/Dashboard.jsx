@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 import { UserOutlined } from "@ant-design/icons";
 import { YMaps, Map, ObjectManager  } from "@pbe/react-yandex-maps";
 
-const mapState = { center: [55.76, 37.64], zoom: 10 };
+const mapState = { center: [55.76, 37.64], zoom: 10, controls: ["zoomControl", "fullscreenControl"],};
 
 const objectManagerFeatures = {
   type: "FeatureCollection",
@@ -74,7 +74,7 @@ const Dashboard = () => {
 
       <Card className="yandex-map">
       <YMaps>
-        <Map width="950px" height="750px" state={mapState}>
+        <Map width="950px" height="750px" state={mapState} modules={["control.ZoomControl", "control.FullscreenControl"]}>
         <ObjectManager 
           options={{ 
           clusterize: true, 
