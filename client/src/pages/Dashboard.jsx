@@ -2,9 +2,39 @@ import React from 'react';
 import { Avatar, Button, Card, Flex, Typography } from 'antd';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { UserOutlined } from "@ant-design/icons";
-import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+import { YMaps, Map, ObjectManager  } from "@pbe/react-yandex-maps";
 
 const mapState = { center: [55.76, 37.64], zoom: 10 };
+
+const objectManagerFeatures = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      id: 1,
+      geometry: {
+        type: "Point",
+        coordinates: [55.869339, 37.498519]
+      },
+      properties: {
+        balloonContent: "Точка 1",
+        hintContent: "Общага"
+      }
+    },
+    {
+      type: "Feature",
+      id: 2,
+      geometry: {
+        type: "Point",
+        coordinates: [55.856124, 37.555723]
+      },
+      properties: {
+        balloonContent: "Точка 2",
+        hintContent: "Дом любви"
+      }
+    },
+  ]
+};
 
 const Dashboard = () => {
   const { userData, logout} = useAuth();
@@ -45,22 +75,24 @@ const Dashboard = () => {
       <Card className="yandex-map">
       <YMaps>
         <Map width="950px" height="750px" state={mapState}>
-
-          <Placemark
-            geometry={{
-            coordinates: [55.751574, 37.573856]
-          }}
-            properties={{
-            hintContent: 'Собственный значок метки',
-            balloonContent: 'Это красивая метка'
-          }}
-            options={{
-            iconLayout: 'default#image',
-            iconImageHref: 'images/myIcon.gif',
-            iconImageSize: [30, 42],
-            iconImageOffset: [-3, -42]
-          }}
-          />
+        <ObjectManager 
+          options={{ 
+          clusterize: true, 
+          gridSize: 32, 
+        }} 
+        objects={{ 
+          openBalloonOnClick: true, 
+          preset: "islands#greenDotIcon", 
+        }} 
+        clusters={{ 
+          preset: "islands#redClusterIcons", 
+        }} 
+        defaultFeatures={objectManagerFeatures} 
+        modules={[ 
+          "objectManager.addon.objectsBalloon", 
+          "objectManager.addon.objectsHint", 
+        ]} 
+        />
         </Map>
       </YMaps>
       </Card>
