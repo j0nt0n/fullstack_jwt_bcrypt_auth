@@ -1,6 +1,6 @@
 # fullstack_jwt_bcrypt_auth
  Ауентафикация на node.js, jwt token and front: react + vite
-
+ 
 server@1.0.0 
 ├── cors@2.8.5
 ├── express@4.19.2
