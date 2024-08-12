@@ -18,7 +18,10 @@ const objectManagerFeatures = {
       },
       properties: {
         balloonContent: "Точка 1",
-        hintContent: "Общага"
+        hintContent: "Общага",
+      },
+      options: {
+        preset: "islands#greenDotIcon",  // Зеленая метка
       }
     },
     {
@@ -30,7 +33,10 @@ const objectManagerFeatures = {
       },
       properties: {
         balloonContent: "Точка 2",
-        hintContent: "Дом любви"
+        hintContent: "Дом любви",
+      },
+      options: {
+        preset: 'islands#redDotIcon' // Красная метка
       }
     },
   ]
@@ -82,7 +88,6 @@ const Dashboard = () => {
         }} 
         objects={{ 
           openBalloonOnClick: true, 
-          preset: "islands#greenDotIcon", 
         }} 
         clusters={{ 
           preset: "islands#redClusterIcons", 
