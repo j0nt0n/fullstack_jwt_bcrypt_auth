@@ -52,6 +52,8 @@ body{
   margin-top: 1.3rem;
   width: 100%;
 }
+
+/* map */
 .yandex-map {
   position: absolute;
   top: 10px;
@@ -59,4 +61,8 @@ body{
   z-index: 500; /* Карта будет находиться под профилем */
   width: 1000px; /* Ширина карты */
   height: 800px; /* Высота карты */
+}
+.image-map {
+  width: 134px;
+  height: 158px;  
 }

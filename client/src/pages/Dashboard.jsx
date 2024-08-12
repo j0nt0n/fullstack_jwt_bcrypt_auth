@@ -17,7 +17,13 @@ const objectManagerFeatures = {
         coordinates: [55.869339, 37.498519]
       },
       properties: {
-        balloonContent: "Точка 1",
+        balloonContent: `
+          <div>
+            <h3>Точка 1: Общага</h3>
+            <p>Это общежитие, где живут студенты.</p>
+            <img class = "image-map" src="https://avatars.mds.yandex.net/get-altay/2405086/2a000001748c8d0609b0af0b2d7ad1347c2e/L" alt="Общага" />
+          </div>
+        `,
         hintContent: "Общага",
       },
       options: {
@@ -32,7 +38,13 @@ const objectManagerFeatures = {
         coordinates: [55.856124, 37.555723]
       },
       properties: {
-        balloonContent: "Точка 2",
+        balloonContent: `
+          <div>
+            <h3>Точка 2: Дом любви</h3>
+            <p>Описание этого места.</p>
+            <img class = "image-map" src="https://avatars.mds.yandex.net/get-altay/2405086/2a000001748c8d0609b0af0b2d7ad1347c2e/L" alt="Дом любви" />
+          </div>
+        `,
         hintContent: "Дом любви",
       },
       options: {
