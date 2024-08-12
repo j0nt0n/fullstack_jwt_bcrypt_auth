@@ -22,5 +22,3 @@ client@0.0.0
 ├── react-router-dom@6.26.0
 ├── react@18.3.1
 └── vite@5.3.5
-
-ffdgdg
