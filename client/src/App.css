@@ -39,7 +39,7 @@ body{
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 300px;
+  width: 450px;
   z-index: 1000;
 }
 .avatar {
@@ -52,6 +52,8 @@ body{
   margin-top: 1.3rem;
   width: 100%;
 }
+
+/* map */
 .yandex-map {
   position: absolute;
   top: 10px;
@@ -59,4 +61,16 @@ body{
   z-index: 500; /* Карта будет находиться под профилем */
   width: 1000px; /* Ширина карты */
   height: 800px; /* Высота карты */
+}
+.image-map {
+  width: 134px;
+  height: 158px;  
+}
+/* allergen */
+.allergen-card {
+  margin-top: 20px; /* Отступ сверху внутри profile-card */
+  width: 100%; /* Заполняет всю ширину внутри profile-card */
+  background-color: #f5f5f5; /* Светло-серый фон */
+  padding: 10px;
+  border-radius: 8px;
 }

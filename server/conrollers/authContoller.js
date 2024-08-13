@@ -11,7 +11,7 @@ exports.signup = async (req, res, next) => {
         const user = await User.findOne({ email: req.body.email });
 
         if(user){
-            return next(new createError('User already exists!', 400));
+            return next(new createError('Пользователь уже существует!', 400));
         }
         
         const hashedPassword = await bcrypt.hash(req.body.password, 12);
@@ -28,7 +28,7 @@ exports.signup = async (req, res, next) => {
         
         res.status(201).json({
             status: 'success',
-            message: 'User registred sucessfully',
+            message: 'Регистрация прошла успешно',
             token,
             user: {
                 id: newUser._id,
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
 
         // Если пользователь не найден
         if (!user) {
-            return next(new createError('User not found!', 404));
+            return next(new createError('Пользователь не найден!', 404));
         }
 
         // Проверка правильности пароля
@@ -60,7 +60,7 @@ exports.login = async (req, res, next) => {
 
         // Если пароль неверный
         if (!isPasswordValid) {
-            return next(new createError('Invalid email or password', 401));
+            return next(new createError('Неверный адрес электронной почты или пароль', 401));
         }
 
         // Создание JWT для пользователя
@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
         res.status(200).json({
             status: 'success',
             token,
-            message: 'Login in successfully',
+            message: 'Успешно вошли в систему',
             user: {
                 id: user._id,
                 name: user.name,
