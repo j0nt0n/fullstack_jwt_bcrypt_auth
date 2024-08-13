@@ -20,10 +20,10 @@ const Login = () => {
         {/* form */}
         <Flex vertical flex={1}>
           <Typography.Title level={3} className="title">
-            Sign In
+            Вход в аккаунт
           </Typography.Title>
           <Typography.Text type="secondary" strong className="slogan">
-            Unlock your account!
+            Войдите в свой аккаунт!
           </Typography.Text>
           <Form 
             layout="vertical"
@@ -32,31 +32,31 @@ const Login = () => {
           >
 
             <Form.Item 
-              label="Email" 
+              label="Почта" 
               name="email" 
               rules={[
               {
               required: true,
-              message: 'Please input your Email!'
+              message: 'Пожалуйста, введите свой адрес электронной почты!'
               },
               {
                 type: 'email',
-                message: 'The input is not valid Email',
+                message: 'Введенный адрес электронной почты неверен',
               }
             ]}>
-              <Input size="large" placeholder="Enter your email!" />
+              <Input size="large" placeholder="Введите свой адрес электронной почты!" />
             </Form.Item>
 
             <Form.Item 
-              label="Password" 
+              label="Пароль" 
               name="password" 
               rules={[
               {
               required: true,
-              message: 'Please input your Password!'
+              message: 'Пожалуйста, введите свой пароль!'
               },
             ]}>
-              <Input.Password size="large" placeholder="Enter your password!" />
+              <Input.Password size="large" placeholder="Введите свой пароль!" />
             </Form.Item>
 
             {
@@ -78,13 +78,13 @@ const Login = () => {
                 size="large" 
                 className="btn"
               >
-                {loading ? <Spin /> : 'Sign In'}
+                {loading ? <Spin /> : 'Вход'}
               </Button>
             </Form.Item>
             <Form.Item>
               <Link to="/">
                 <Button size="large" className="btn">
-                  Create an Account
+                  Создать учетную запись
                 </Button>
               </Link>
             </Form.Item>

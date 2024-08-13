@@ -11,7 +11,7 @@ exports.signup = async (req, res, next) => {
         const user = await User.findOne({ email: req.body.email });
 
         if(user){
-            return next(new createError('User already exists!', 400));
+            return next(new createError('Пользователь уже существует!', 400));
         }
         
         const hashedPassword = await bcrypt.hash(req.body.password, 12);
@@ -28,7 +28,7 @@ exports.signup = async (req, res, next) => {
         
         res.status(201).json({
             status: 'success',
-            message: 'User registred sucessfully',
+            message: 'Регистрация прошла успешно',
             token,
             user: {
                 id: newUser._id,
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
 
         // Если пользователь не найден
         if (!user) {
-            return next(new createError('User not found!', 404));
+            return next(new createError('Пользователь не найден!', 404));
         }
 
         // Проверка правильности пароля
@@ -60,7 +60,7 @@ exports.login = async (req, res, next) => {
 
         // Если пароль неверный
         if (!isPasswordValid) {
-            return next(new createError('Invalid email or password', 401));
+            return next(new createError('Неверный адрес электронной почты или пароль', 401));
         }
 
         // Создание JWT для пользователя
@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
         res.status(200).json({
             status: 'success',
             token,
-            message: 'Login in successfully',
+            message: 'Успешно вошли в систему',
             user: {
                 id: user._id,
                 name: user.name,
@@ -82,6 +82,47 @@ exports.login = async (req, res, next) => {
         });
     } catch (error) {
         // Передача ошибки в middleware для обработки
+        next(error);
+    }
+};
+
+// смена пароля
+exports.changePassword = async (req, res, next) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!req.user || !req.user.id) {
+            return next(new createError('Нет данных пользователя!', 400));
+        }
+
+        const user = await User.findById(req.user.id).select('+password');
+
+        if (!user) {
+            return next(new createError('Пользователь не найден!', 404));
+        }
+
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+        if (!isPasswordValid) {
+            return next(new createError('Текущий пароль неверен!', 401));
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+
+        user.password = hashedNewPassword;
+        await user.save();
+
+        const token = jwt.sign({ id: user._id }, 'secretkey123', {
+            expiresIn: '90d',
+        });
+
+        console.log('Пароль успешно изменен!');
+        res.status(200).json({
+            status: 'success',
+            message: 'Пароль успешно изменен',
+            token,
+        });
+    } catch (error) {
         next(error);
     }
 };

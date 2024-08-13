@@ -15,10 +15,10 @@ const Register = () => {
         {/* form */}
         <Flex vertical flex={1}>
           <Typography.Title level={3} className="title">
-            Create an account
+            Создать учетную запись
           </Typography.Title>
           <Typography.Text type="secondary" strong className="slogan">
-            Join for exclusive access!
+            Присоединяйтесь для облегчения своей жизни!
           </Typography.Text>
           <Form 
             layout="vertical"
@@ -27,55 +27,55 @@ const Register = () => {
           >
 
             <Form.Item 
-              label="Full Name" 
+              label="ФИО" 
               name="name" 
               rules={[
               {
               required: true,
-              message: 'Please input your full name!'
+              message: 'Пожалуйста, введите свое полное имя!'
               }
             ]}>
-              <Input size="large" placeholder="Enter your full name!" />
+              <Input size="large" placeholder="Введите свое полное имя!" />
             </Form.Item>
 
             <Form.Item 
-              label="Email" 
+              label="Почта" 
               name="email" 
               rules={[
               {
               required: true,
-              message: 'Please input your Email!'
+              message: 'Пожалуйста, введите свой адрес электронной почты!'
               },
               {
                 type: 'email',
-                message: 'The input is not valid Email',
+                message: 'Введенный адрес электронной почты неверен',
               }
             ]}>
-              <Input size="large" placeholder="Enter your email!" />
+              <Input size="large" placeholder="Введите свой адрес электронной почты!" />
             </Form.Item>
 
             <Form.Item 
-              label="Password" 
+              label="Пароль" 
               name="password" 
               rules={[
               {
               required: true,
-              message: 'Please input your Password!'
+              message: 'Пожалуйста, введите свой пароль!'
               },
             ]}>
-              <Input.Password size="large" placeholder="Enter your password!" />
+              <Input.Password size="large" placeholder="Введите свой пароль!" />
             </Form.Item>
 
             <Form.Item 
-              label="Password" 
+              label="Подтвердите пароль" 
               name="passwordConfirm" 
               rules={[
               {
               required: true,
-              message: 'Please input your Confirm Password!'
+              message: 'Пожалуйста, введите свой подтверждающий пароль!'
               },
             ]}>
-              <Input.Password size="large" placeholder="Re-enter your password!" />
+              <Input.Password size="large" placeholder="Повторно введите свой пароль!" />
             </Form.Item>
 
             {
@@ -97,13 +97,13 @@ const Register = () => {
                 size="large" 
                 className="btn"
               >
-                {loading ? <Spin /> : 'Create Account'}
+                {loading ? <Spin /> : 'Создать аккаунт'}
               </Button>
             </Form.Item>
             <Form.Item>
               <Link to="/login">
                 <Button size="large" className="btn">
-                  Sign In
+                  Войти в уже существующий
                 </Button>
               </Link>
             </Form.Item>
