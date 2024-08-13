@@ -48,9 +48,20 @@ body{
 .username {
   text-transform: capitalize;
 }
+.profile-card {
+  margin: 2rem auto;
+  max-width: 600px; /* Устанавливаем максимальную ширину карточки */
+}
+/* profile btn*/
 .profile-btn {
   margin-top: 1.3rem;
   width: 100%;
+  display: block; /* Устанавливаем блоковую модель отображения */
+}
+
+.link-button {
+  width: 100%; /* Устанавливаем ширину для ссылки, чтобы кнопка внутри занимала всю доступную ширину */
+  display: block; /* Устанавливаем блочный элемент */
 }
 
 /* map */

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import './App.css';
 import Register from './auth/Register';
 import Login from './auth/Login';
+import ChangePassword from './auth/ChangePassword';
 import Dashboard from './pages/Dashboard';
 import { useAuth } from './contexts/AuthContext';
 
@@ -18,6 +19,11 @@ const App = () => {
       <Route
         path = '/login'   
         element={!isAuthenticated ? <Login /> : <Navigate to= '/dashboard' />
+        }
+      />
+      <Route 
+        path = '/changepassword' 
+        element={ isAuthenticated ? <ChangePassword /> : <Login/>
         }
       />
       <Route 

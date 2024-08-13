@@ -2,36 +2,9 @@ import React, { useState } from 'react';
 import { Avatar, Button, Card, Checkbox, Flex, Typography } from 'antd';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { UserOutlined } from "@ant-design/icons";
-import { YMaps, Map, ObjectManager } from "@pbe/react-yandex-maps";
-
-const mapState = { center: [55.76, 37.64], zoom: 10, controls: ["zoomControl", "fullscreenControl"] };
-
-const restaurantData = [
-  { 
-    id: 1, 
-    coordinates: [55.869339, 37.498519], 
-    name: "Ресторан 1", 
-    products: ["орехи", "рыба"], 
-    description: "Уютный ресторан с отличной кухней и обслуживанием.",
-    imageUrl: "https://avatars.mds.yandex.net/get-altay/10238647/2a000001904c30be9b6d405d1e7c1e90048b/L"
-  },
-  { 
-    id: 2, 
-    coordinates: [55.856124, 37.555723], 
-    name: "Ресторан 2", 
-    products: ["молоко", "яйца"],
-    description: "Уютный ресторан с отличной кухней и обслуживанием.",
-    imageUrl: "https://avatars.mds.yandex.net/get-altay/10238647/2a000001904c30be9b6d405d1e7c1e90048b/L"
-  },
-  { 
-    id: 3, 
-    coordinates: [55.751244, 37.618423], 
-    name: "Ресторан 3", 
-    products: ["орехи", "яйца"],
-    description: "Уютный ресторан с отличной кухней и обслуживанием.",
-    imageUrl: "https://avatars.mds.yandex.net/get-altay/10238647/2a000001904c30be9b6d405d1e7c1e90048b/L"
-  },
-];
+import MapComponent from '../components/MapComponent'; // Импортируем компонент карты
+import { Link } from 'react-router-dom'; // Импортируйте Link
+import restaurantData from '../data/restaurantData'; // Импортируем данные о ресторанах
 
 const Dashboard = () => {
   const { userData, logout } = useAuth();
@@ -49,32 +22,6 @@ const Dashboard = () => {
         ? prevAllergens.filter(item => item !== value)
         : [...prevAllergens, value]
     );
-  };
-
-  const objectManagerFeatures = {
-    type: "FeatureCollection",
-    features: restaurantData.map(restaurant => {
-      const hasAllergen = restaurant.products.some(product => allergens.includes(product));
-      return {
-        type: "Feature",
-        id: restaurant.id,
-        geometry: { type: "Point", coordinates: restaurant.coordinates },
-        properties: {
-          balloonContent: `
-            <div>
-              <h3>${restaurant.name}</h3>
-              ${restaurant.description ? `<p>${restaurant.description}</p>` : ''}
-              ${restaurant.imageUrl ? `<img src="${restaurant.imageUrl}" alt="${restaurant.name}" style="width:100px;height:auto;" />` : ''}
-              <p>Продукты: ${restaurant.products.join(", ")}</p>
-            </div>
-          `,
-          hintContent: restaurant.name,
-        },
-        options: {
-          preset: hasAllergen ? 'islands#redDotIcon' : 'islands#greenDotIcon',
-        },
-      };
-    }),
   };
 
   const handleRefreshMap = () => {
@@ -95,6 +42,18 @@ const Dashboard = () => {
           <Typography.Text type="secondary">
             Роль: {userData.role}
           </Typography.Text>
+          
+          {/* Кнопка для перехода на страницу смены пароля */}
+          <Link to="/changepassword" className="link-button">
+            <Button 
+              size="large" 
+              type="primary" 
+              className="profile-btn"
+            >
+              Сменить пароль
+            </Button>
+          </Link>
+
           <Button 
             size="large" 
             type="primary" 
@@ -123,18 +82,11 @@ const Dashboard = () => {
       </Card>
 
       <Card className="yandex-map">
-        <YMaps>
-          <Map width="950px" height="750px" state={mapState} modules={["control.ZoomControl", "control.FullscreenControl"]}>
-            <ObjectManager 
-              key={updateKey} // Используем ключ для принудительного обновления
-              options={{ clusterize: true, gridSize: 32 }} 
-              objects={{ openBalloonOnClick: true }} 
-              clusters={{ preset: "islands#redClusterIcons" }} 
-              features={objectManagerFeatures} // Используем features вместо defaultFeatures
-              modules={[ "objectManager.addon.objectsBalloon", "objectManager.addon.objectsHint" ]}
-            />
-          </Map>
-        </YMaps>
+        <MapComponent
+          restaurantData={restaurantData}
+          allergens={allergens}
+          updateKey={updateKey}
+        />
       </Card>
     </div>
   ); 
