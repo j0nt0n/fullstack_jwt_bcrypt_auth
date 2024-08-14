@@ -14,6 +14,7 @@ client@0.0.0
 ├── @types/react@18.3.3
 ├── @vitejs/plugin-react@4.3.1
 ├── antd@5.20.0
+├── axios@1.7.3
 ├── eslint-plugin-react-hooks@4.6.2
 ├── eslint-plugin-react-refresh@0.4.9
 ├── eslint-plugin-react@7.35.0

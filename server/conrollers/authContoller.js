@@ -85,3 +85,44 @@ exports.login = async (req, res, next) => {
         next(error);
     }
 };
+
+// смена пароля
+exports.changePassword = async (req, res, next) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        if (!req.user || !req.user.id) {
+            return next(new createError('Нет данных пользователя!', 400));
+        }
+
+        const user = await User.findById(req.user.id).select('+password');
+
+        if (!user) {
+            return next(new createError('Пользователь не найден!', 404));
+        }
+
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+        if (!isPasswordValid) {
+            return next(new createError('Текущий пароль неверен!', 401));
+        }
+
+        const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+
+        user.password = hashedNewPassword;
+        await user.save();
+
+        const token = jwt.sign({ id: user._id }, 'secretkey123', {
+            expiresIn: '90d',
+        });
+
+        console.log('Пароль успешно изменен!');
+        res.status(200).json({
+            status: 'success',
+            message: 'Пароль успешно изменен',
+            token,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
