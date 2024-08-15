@@ -134,7 +134,6 @@ exports.changePassword = async (req, res, next) => {
       token,
     });
   } catch (error) {
-    // Обработка ошибок
     next(error);
   }
 };
