@@ -3,9 +3,10 @@
  
 server@1.0.0 
 ├── cors@2.8.5
+├── dotenv@16.4.5
 ├── express@4.19.2
 ├── jsonwebtoken@9.0.2
-└── mongoose@8.5.2
+└── pg@8.12.0
 
 client@0.0.0
 ├── @ant-design/pro-layout@7.19.12
