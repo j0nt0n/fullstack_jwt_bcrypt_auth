@@ -4,6 +4,7 @@ import './App.css';
 import Register from './auth/Register';
 import Login from './auth/Login';
 import ChangePassword from './auth/ChangePassword';
+import RegUserInfo from './auth/RegUserInfo';
 import Dashboard from './pages/Dashboard';
 import { useAuth } from './contexts/AuthContext';
 
@@ -19,6 +20,11 @@ const App = () => {
       <Route
         path = '/login'   
         element={!isAuthenticated ? <Login /> : <Navigate to= '/dashboard' />
+        }
+      />
+      <Route 
+        path = '/reginfo' 
+        element={ isAuthenticated ? <RegUserInfo /> : <Login/>
         }
       />
       <Route 
