@@ -14,7 +14,7 @@ const App = () => {
     <Routes>
       <Route 
         path = '/' 
-        element={ !isAuthenticated ? <Register /> : <Navigate to= '/dashboard' />
+        element={ !isAuthenticated ? <Register /> : <Navigate to= '/reginfo' />
         }
       />
       <Route

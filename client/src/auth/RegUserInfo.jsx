@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Card, Flex, Form, Input, Typography, Button, Alert, Spin } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Импортируем useNavigate
 import registerImage from '../assets/register.png';
 import useRegUserInfo from '../hooks/useRegUserInfo'; // Хук для отправки данных пользователя
 
 const RegisterUserInfo = () => {
   const { error, loading, submitUserInfo } = useRegUserInfo();
   const [form] = Form.useForm();
+  const navigate = useNavigate(); // Инициализируем useNavigate
 
   const handleRegisterUserInfo = async (values) => {
     // Преобразование строки аллергий в массив, удаление пробелов и приведение к нижнему регистру
@@ -16,8 +17,14 @@ const RegisterUserInfo = () => {
 
     const userInfo = { ...values, allergies: allergiesArray };
     
-    await submitUserInfo(userInfo); // Отправляем данные формы
-    form.resetFields(); // Очистка полей формы после успешной регистрации
+    try {
+      await submitUserInfo(userInfo); // Отправляем данные формы
+      
+      form.resetFields(); // Очистка полей формы после успешной регистрации
+      navigate('/dashboard'); // Перенаправляем на дашборд после успешной регистрации
+    } catch (error) {
+      console.error("Ошибка при отправке данных пользователя:", error);
+    }
   };
 
   return (
@@ -127,7 +134,7 @@ const RegisterUserInfo = () => {
               </Button>
             </Form.Item>
             <Form.Item>
-              <Link to="/">
+              <Link to="/dashboard">
                 <Button size="large" className="btn">
                   Назад на главную
                 </Button>
@@ -141,3 +148,4 @@ const RegisterUserInfo = () => {
 };
 
 export default RegisterUserInfo;
+
