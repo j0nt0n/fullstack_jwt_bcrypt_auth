@@ -35,46 +35,48 @@ exports.regUserInfo = async (req, res, next) => {
         }
       
         // Обработка аллергий
-        for (let allergy of allergies) {
-            // Проверяем, существует ли уже аллераген в базе данных
-            let allergyResult = await pool.query(
-                'SELECT _id FROM allergy WHERE name = $1',
-                [allergy]
-            );
-          
-            let allergyId;
-            if (allergyResult.rows.length > 0) {
-                // Если существует, используем существующий ID
-                allergyId = allergyResult.rows[0]._id;
-            } else {
-                // Если не существует, добавляем новый аллерген
-                let insertResult = await pool.query(
-                    'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+        // Если allergies пустое, удаляем все связанные записи
+        if (!allergies || allergies.length === 0) {
+            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+        } else {
+            // Если allergies не пустое, обновляем записи аллергий
+            // Сначала удаляем старые записи аллергий
+            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+
+            // Обработка аллергий
+            for (let allergy of allergies) {
+                // Проверяем, существует ли уже аллераген в базе данных
+                let allergyResult = await pool.query(
+                    'SELECT _id FROM allergy WHERE name = $1',
                     [allergy]
                 );
-                allergyId = insertResult.rows[0]._id;
-            }
+              
+                let allergyId;
+                if (allergyResult.rows.length > 0) {
+                    // Если существует, используем существующий ID
+                    allergyId = allergyResult.rows[0]._id;
+                } else {
+                    // Если не существует, добавляем новый аллерген
+                    let insertResult = await pool.query(
+                        'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+                        [allergy]
+                    );
+                    allergyId = insertResult.rows[0]._id;
+                }
 
-            // Создаем связь между пользователем и аллергеном
-            await pool.query(
-                'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
-                [userId, allergyId]
-            );
+                // Создаем связь между пользователем и аллергеном
+                await pool.query(
+                    'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
+                    [userId, allergyId]
+                );
+            }
         }
       
         // Ответ с успешной регистрацией
         res.status(201).json({
           status: 'success',
           message: 'Информация о пользователе успешно внесена',
-          user: {
-              id: userId,
-              email: user.email,
-              full_name,
-              phone_number,
-              age,
-              gender
-          }
-      });
+        });
     } catch (error) {
       next(error);
     }
@@ -153,32 +155,42 @@ exports.updUserInfo = async (req, res, next) => {
         await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
 
         // Обработка новых аллергий
-        for (let allergy of allergies) {
-            allergy = allergy.toLowerCase().trim(); // Приведение к нижнему регистру и удаление пробелов
+        // Если allergies пустое, удаляем все связанные записи
+        if (!allergies || allergies.length === 0) {
+            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+        } else {
+            // Если allergies не пустое, обновляем записи аллергий
+            // Сначала удаляем старые записи аллергий
+            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
 
-            let allergyResult = await pool.query(
-                'SELECT _id FROM allergy WHERE name = $1',
-                [allergy]
-            );
-
-            let allergyId;
-            if (allergyResult.rows.length > 0) {
-                allergyId = allergyResult.rows[0]._id;
-            } else {
-                const insertResult = await pool.query(
-                    'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+            // Обработка аллергий
+            for (let allergy of allergies) {
+                // Проверяем, существует ли уже аллераген в базе данных
+                let allergyResult = await pool.query(
+                    'SELECT _id FROM allergy WHERE name = $1',
                     [allergy]
                 );
-                allergyId = insertResult.rows[0]._id;
+              
+                let allergyId;
+                if (allergyResult.rows.length > 0) {
+                    // Если существует, используем существующий ID
+                    allergyId = allergyResult.rows[0]._id;
+                } else {
+                    // Если не существует, добавляем новый аллерген
+                    let insertResult = await pool.query(
+                        'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+                        [allergy]
+                    );
+                    allergyId = insertResult.rows[0]._id;
+                }
+
+                // Создаем связь между пользователем и аллергеном
+                await pool.query(
+                    'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
+                    [userId, allergyId]
+                );
             }
-
-            // Добавление связи между пользователем и аллергеном
-            await pool.query(
-                'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
-                [userId, allergyId]
-            );
         }
-
         // Ответ с успешным обновлением
         res.status(200).json({
             status: 'success',

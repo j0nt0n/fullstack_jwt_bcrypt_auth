@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, Flex, Form, Input, Typography, Button, Alert, Spin } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'; // Импортируем useNavigate
 import registerImage from '../assets/register.png';
@@ -12,8 +12,10 @@ const RegisterUserInfo = () => {
   const handleRegisterUserInfo = async (values) => {
     // Преобразование строки аллергий в массив, удаление пробелов и приведение к нижнему регистру
     const allergiesArray = values.allergies
-      .split(',')
-      .map(allergy => allergy.trim().toLowerCase());
+      ? values.allergies
+          .split(',')
+          .map(allergy => allergy.trim().toLowerCase())
+      : 'нету'; 
 
     const userInfo = { ...values, allergies: allergiesArray };
     

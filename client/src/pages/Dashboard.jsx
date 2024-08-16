@@ -54,6 +54,16 @@ const Dashboard = () => {
             </Button>
           </Link>
 
+          <Link to="/userinfo" className="link-button">
+            <Button 
+              size="large" 
+              type="primary" 
+              className="profile-btn"
+            >
+              Смена информации
+            </Button>
+          </Link>
+
           <Button 
             size="large" 
             type="primary" 
