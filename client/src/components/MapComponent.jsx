@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { YMaps, Map, ObjectManager } from "@pbe/react-yandex-maps";
 
 const mapState = { center: [55.76, 37.64], zoom: 10, controls: ["zoomControl", "fullscreenControl"] };

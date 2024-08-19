@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, Button, Card, Checkbox, Flex, Typography } from 'antd';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { UserOutlined } from "@ant-design/icons";
 import MapComponent from '../components/MapComponent'; // Импортируем компонент карты
 import { Link } from 'react-router-dom'; // Импортируйте Link
-import restaurantData from '../data/restaurantData'; // Импортируем данные о ресторанах
+// import restaurantData from '../data/restaurantData'; // Импортируем данные о ресторанах
 
 const Dashboard = () => {
   const { userData, logout } = useAuth();
   const [allergens, setAllergens] = useState([]);
   const [updateKey, setUpdateKey] = useState(0); // Состояние для обновления карты
+  const [restaurantData, setRestaurantData] = useState([]); // Состояние для данных ресторанов
+
+  useEffect(() => {
+    // Загрузка данных из JSON файла
+    fetch('/restaurants.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setRestaurantData(data))
+      .catch(error => console.error('Error loading restaurant data:', error));
+  }, []);
 
   const handleLogout = async () => {
     await logout();
