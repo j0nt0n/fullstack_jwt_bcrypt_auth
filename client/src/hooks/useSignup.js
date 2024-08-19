@@ -9,7 +9,7 @@ const useSignup = () => {
 
     const registerUser = async (values) => {
         if(values.password !== values.passwordConfirm){
-            return setError("Passwords are not the same");
+            return setError("Пароли не должны совпадать");
         }
 
         try{
@@ -33,7 +33,7 @@ const useSignup = () => {
                 setError(data.message);
             }        
             else{
-                message.error('Registration failed');
+                message.error("Не удалось выполнить регистрацию");
             }
         }catch (error){
             message.error(error);

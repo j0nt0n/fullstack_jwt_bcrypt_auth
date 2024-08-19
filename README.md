@@ -3,9 +3,10 @@
  
 server@1.0.0 
 ├── cors@2.8.5
+├── dotenv@16.4.5
 ├── express@4.19.2
 ├── jsonwebtoken@9.0.2
-└── mongoose@8.5.2
+└── pg@8.12.0
 
 client@0.0.0
 ├── @ant-design/pro-layout@7.19.12
@@ -14,7 +15,6 @@ client@0.0.0
 ├── @types/react@18.3.3
 ├── @vitejs/plugin-react@4.3.1
 ├── antd@5.20.0
-├── axios@1.7.3
 ├── eslint-plugin-react-hooks@4.6.2
 ├── eslint-plugin-react-refresh@0.4.9
 ├── eslint-plugin-react@7.35.0

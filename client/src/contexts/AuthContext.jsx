@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios'; // Для отправки HTTP-запросов
 
 const AuthContext = createContext();
 
@@ -36,33 +35,9 @@ export const AuthProvider = ({children}) => {
         setIsAuthenticated(false);
     };
 
-    const changePassword = async (currentPassword, newPassword) => {
-        try {
-            // Отправка запроса на сервер для смены пароля
-            const response = await axios.patch(
-                'http://localhost:3000/api/auth/change', // URL сервера
-                { currentPassword, newPassword },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}` // Использование текущего токена
-                    }
-                }
-            );
-            
-            // Обработка успешного ответа
-            console.log(response.data.message);
-            // Обновление токена, если сервер вернул новый токен
-            if (response.data.token) {
-                login(response.data.token, userData);
-            }
-        } catch (error) {
-            console.error('Ошибка при смене пароля:', error.response ? error.response.data.message : error.message);
-        }
-    };
-
     return (
         <AuthContext.Provider
-            value={{ token, isAuthenticated, login, logout, userData, changePassword }}
+            value={{ token, isAuthenticated, login, logout, userData }} 
         >
             {children}
         </AuthContext.Provider>

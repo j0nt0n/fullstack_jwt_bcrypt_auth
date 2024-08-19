@@ -27,18 +27,6 @@ const Register = () => {
           >
 
             <Form.Item 
-              label="ФИО" 
-              name="name" 
-              rules={[
-              {
-              required: true,
-              message: 'Пожалуйста, введите свое полное имя!'
-              }
-            ]}>
-              <Input size="large" placeholder="Введите свое полное имя!" />
-            </Form.Item>
-
-            <Form.Item 
               label="Почта" 
               name="email" 
               rules={[

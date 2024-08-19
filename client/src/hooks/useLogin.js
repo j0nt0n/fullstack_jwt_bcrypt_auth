@@ -29,7 +29,7 @@ const useLogin = () => {
                 setError(data.message);
             }        
             else{
-                message.error('Login failed');
+                message.error("Ошибка входа");
             }
         }catch (error){
             message.error(error);
