@@ -15,13 +15,13 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route 
-          path='/' 
-          element={!isAuthenticated ? <Register /> : <Navigate to='/dashboard' />}
-        />
-        <Route
-          path='/login'
+      <Route
+          path='/'
           element={!isAuthenticated ? <Login /> : <Navigate to='/dashboard' />}
+        />
+        <Route 
+          path='/signup' 
+          element={!isAuthenticated ? <Register /> : <Navigate to='/reginfo' />}
         />
         <Route 
           path='/reginfo' 
