@@ -206,7 +206,7 @@ exports.getAllRestaurants = async (req, res, next) => {
     try {
         // Получение информации обо всех ресторанах
         const restaurantsResult = await pool.query(
-            'SELECT rest_id, latitude, longitude, name, description, imageUrl FROM Restaurant'
+            'SELECT rest_id, latitude, longitude, name, description, imageurl FROM Restaurant'
         );
 
         const restaurants = restaurantsResult.rows;
@@ -229,7 +229,7 @@ exports.getAllRestaurants = async (req, res, next) => {
                 coordinates: [restaurant.latitude, restaurant.longitude],
                 name: restaurant.name,
                 description: restaurant.description,
-                imageUrl: restaurant.imageUrl,
+                imageurl: restaurant.imageurl,
                 products: products
             };
         });

@@ -14,11 +14,12 @@ const MapComponent = ({ cafeData, allergens, updateKey }) => {
         geometry: { type: "Point", coordinates: restaurant.coordinates },
         properties: {
           balloonContent: `
-            <div>
-              <h3>${restaurant.name}</h3>
-              ${restaurant.description ? `<p>${restaurant.description}</p>` : ''}
-              <p>Продукты: ${restaurant.products.join(", ")}</p>
-            </div>
+          <div>
+            <h3>${restaurant.name}</h3>
+            ${restaurant.description ? `<p>${restaurant.description}</p>` : ''}
+            ${restaurant.imageurl ? `<img src="${restaurant.imageurl}" alt="${restaurant.name}" style="width:100px;height:auto;" />` : ''}
+            <p>Продукты: ${restaurant.products.join(", ")}</p>
+          </div>
           `,
           hintContent: restaurant.name,
         },

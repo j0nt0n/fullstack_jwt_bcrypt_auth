@@ -21,7 +21,7 @@ const useGetCafeData = () => {
         if (data.restaurants) {
           // Форматируем данные
           const formattedData = data.restaurants.map((restaurant) => {
-            const { _id, coordinates, name, description, imageUrl, products } = restaurant;
+            const { _id, coordinates, name, description, imageurl, products } = restaurant;
 
             return {
               id: _id, // Используем rest_id объекта
@@ -29,7 +29,7 @@ const useGetCafeData = () => {
               name: name, // Название ресторана
               products: products || [], // Массив продуктов (аллергенов)
               description: description, // Описание ресторана
-              imageUrl: imageUrl // URL изображения ресторана
+              imageurl: imageurl // URL изображения ресторана
             };
           });
 

@@ -5,24 +5,23 @@ import { UserOutlined } from "@ant-design/icons";
 import MapComponent from '../components/MapComponent'; // Компонент карты
 import { Link } from 'react-router-dom'; // Импортируем Link
 import useGetCafeData from '../hooks/useGetCafeData'; // Импортируем хук для данных кафе
+import useGetUserInfo from '../hooks/useGetUserInfo'; // Импортируем хук для данных пользователя
 
 const Dashboard = () => {
   const { userData, logout } = useAuth();
   const [allergens, setAllergens] = useState([]);
   const [updateKey, setUpdateKey] = useState(0); // Состояние для обновления карты
   const { cafeData, loading, error } = useGetCafeData(); // Получаем данные кафе с помощью хука
+  const { userInfo, loading: userLoading, error: userError } = useGetUserInfo(); // Получаем данные пользователя с помощью хука
+
+  useEffect(() => {
+    if (userInfo) {
+      setAllergens(userInfo.allergies); // Устанавливаем аллергены пользователя
+    }
+  }, [userInfo]);
 
   const handleLogout = async () => {
     await logout();
-  };
-
-  const handleAllergenChange = (e) => {
-    const value = e.target.value;
-    setAllergens(prevAllergens =>
-      prevAllergens.includes(value)
-        ? prevAllergens.filter(item => item !== value)
-        : [...prevAllergens, value]
-    );
   };
 
   const handleRefreshMap = () => {
@@ -57,6 +56,14 @@ const Dashboard = () => {
           </Link>
 
           <Button 
+            type="primary" 
+            onClick={handleRefreshMap} 
+            className="profile-btn"
+          >
+            Обновить карту
+          </Button>
+
+          <Button 
             size="large" 
             type="primary" 
             className="profile-btn"
@@ -65,21 +72,6 @@ const Dashboard = () => {
             Выход
           </Button>
 
-          <Card className="allergen-card">
-            <Typography.Title level={4} strong>Выбор аллергенов или продуктов, которые сегодня бы не хотели:</Typography.Title>
-            <div>
-              <Checkbox value="орехи" onChange={handleAllergenChange}>орехи</Checkbox>
-              <Checkbox value="яйца" onChange={handleAllergenChange}>яйца</Checkbox>
-              <Checkbox value="молоко" onChange={handleAllergenChange}>молоко</Checkbox>
-            </div>
-            <Button 
-              type="primary" 
-              onClick={handleRefreshMap} 
-              style={{ marginTop: '16px' }}
-            >
-              Обновить карту
-            </Button>
-          </Card>
         </Flex>
       </Card>
 
