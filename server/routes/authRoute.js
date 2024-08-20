@@ -10,5 +10,6 @@ router.patch('/change', protect,authController.changePassword);
 router.get('/getinfo', protect,infoController.getUserInfo);
 router.post('/reginfo', protect,infoController.regUserInfo);
 router.patch('/updinfo', protect,infoController.updUserInfo);
+router.get('/getallrest',infoController.getAllRestaurants);
 
 module.exports = router;

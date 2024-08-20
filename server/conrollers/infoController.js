@@ -200,3 +200,49 @@ exports.updUserInfo = async (req, res, next) => {
         next(error);
     }
 };
+
+// Получение информации о ресторане и о его продуктах
+exports.getAllRestaurants = async (req, res, next) => {
+    try {
+        // Получение информации обо всех ресторанах
+        const restaurantsResult = await pool.query(
+            'SELECT rest_id, latitude, longitude, name, description, imageUrl FROM Restaurant'
+        );
+
+        const restaurants = restaurantsResult.rows;
+
+        if (restaurants.length === 0) {
+            return next(new createError('Рестораны не найдены!', 404));
+        }
+
+        // Получение информации о продуктах (аллергенах) для каждого ресторана
+        const restaurantInfoPromises = restaurants.map(async restaurant => {
+            const productsResult = await pool.query(
+                'SELECT a.name FROM Allergy a INNER JOIN RestaurantAllergy ra ON a._id = ra.allergy_id WHERE ra.rest_id = $1',
+                [restaurant.rest_id]
+            );
+
+            const products = productsResult.rows.map(row => row.name);
+
+            return {
+                _id: restaurant.rest_id,
+                coordinates: [restaurant.latitude, restaurant.longitude],
+                name: restaurant.name,
+                description: restaurant.description,
+                imageUrl: restaurant.imageUrl,
+                products: products
+            };
+        });
+
+        // Ждём выполнения всех запросов и формируем итоговый массив ресторанов
+        const allRestaurants = await Promise.all(restaurantInfoPromises);
+
+        // Ответ с информацией о всех ресторанах
+        res.status(200).json({
+            status: 'success',
+            restaurants: allRestaurants
+        });
+    } catch (error) {
+        next(error);
+    }
+};

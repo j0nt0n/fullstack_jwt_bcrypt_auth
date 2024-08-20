@@ -11,30 +11,25 @@ const useGetCafeData = () => {
       setLoading(true);
       setError(null);
 
-      // Выполняем запрос к API для получения данных
-      const res = await fetch(
-        'https://apidata.mos.ru/v1/datasets/587/features?versionNumber=7&releaseNumber=24&api_key=441375bc-4f4e-4fab-9a0c-91640c20e7db', 
-        { method: 'GET' }
-      );
+      // Выполняем запрос к вашему API для получения данных
+      const res = await fetch('http://localhost:3000/api/auth/getallrest', { method: 'GET' });
 
-      const data = await res.json(); // Обрабатываем ответ от сервера
+      // Обрабатываем ответ от сервера
+      const data = await res.json();
 
       if (res.ok) {
-        if (data.features) {
+        if (data.restaurants) {
           // Форматируем данные
-          const formattedData = data.features.map((feature) => {
-            const { ID, ObjectType, StationaryObjectName, Address } = feature.properties.attributes;
-            const { coordinates } = feature.geometry;
-
-            // Меняем местами долготу и широту
-            const [longitude, latitude] = coordinates;
+          const formattedData = data.restaurants.map((restaurant) => {
+            const { _id, coordinates, name, description, imageUrl, products } = restaurant;
 
             return {
-              id: ID, // Используем ID объекта
-              coordinates: [latitude, longitude], // Меняем местами координаты
-              name: StationaryObjectName, // Название объекта
-              products: [], // Массив продуктов пока пустой
-              description: `${ObjectType} в ${Address}`, // Формируем описание
+              id: _id, // Используем rest_id объекта
+              coordinates: coordinates, // Координаты уже в нужном формате
+              name: name, // Название ресторана
+              products: products || [], // Массив продуктов (аллергенов)
+              description: description, // Описание ресторана
+              imageUrl: imageUrl // URL изображения ресторана
             };
           });
 
