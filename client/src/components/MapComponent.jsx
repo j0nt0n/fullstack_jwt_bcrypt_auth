@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { YMaps, Map, ObjectManager } from "@pbe/react-yandex-maps";
 
 const mapState = { center: [55.76, 37.64], zoom: 10, controls: ["zoomControl", "fullscreenControl"] };
 
-const MapComponent = ({ restaurantData, allergens, updateKey }) => {
+const MapComponent = ({ cafeData, allergens, updateKey }) => {
   const objectManagerFeatures = {
     type: "FeatureCollection",
-    features: restaurantData.map(restaurant => {
+    features: cafeData.map(restaurant => {
       const hasAllergen = restaurant.products.some(product => allergens.includes(product));
       return {
         type: "Feature",
@@ -14,12 +14,12 @@ const MapComponent = ({ restaurantData, allergens, updateKey }) => {
         geometry: { type: "Point", coordinates: restaurant.coordinates },
         properties: {
           balloonContent: `
-            <div>
-              <h3>${restaurant.name}</h3>
-              ${restaurant.description ? `<p>${restaurant.description}</p>` : ''}
-              ${restaurant.imageUrl ? `<img src="${restaurant.imageUrl}" alt="${restaurant.name}" style="width:100px;height:auto;" />` : ''}
-              <p>Продукты: ${restaurant.products.join(", ")}</p>
-            </div>
+          <div>
+            <h3>${restaurant.name}</h3>
+            ${restaurant.description ? `<p>${restaurant.description}</p>` : ''}
+            ${restaurant.imageurl ? `<img src="${restaurant.imageurl}" alt="${restaurant.name}" style="width:100px;height:auto;" />` : ''}
+            <p>Продукты: ${restaurant.products.join(", ")}</p>
+          </div>
           `,
           hintContent: restaurant.name,
         },
