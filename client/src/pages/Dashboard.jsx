@@ -54,6 +54,7 @@ const Dashboard = () => {
           </Link>
 
           <Button 
+            size="large" 
             type="primary" 
             onClick={handleRefreshMap} 
             className="profile-btn"
