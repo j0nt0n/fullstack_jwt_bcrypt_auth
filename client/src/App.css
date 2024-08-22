@@ -58,6 +58,14 @@ body{
   width: 100%;
   display: block; /* Устанавливаем блоковую модель отображения */
 }
+.logout-btn {
+  background-color: #ff4d4f;
+  color: #ffffff;
+}
+
+.logout-btn:hover {
+  background-color: #ff7875;
+}
 
 .link-button {
   width: 100%; /* Устанавливаем ширину для ссылки, чтобы кнопка внутри занимала всю доступную ширину */

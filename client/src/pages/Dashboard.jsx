@@ -10,12 +10,14 @@ import useGetUserInfo from '../hooks/useGetUserInfo'; // Импортируем 
 const Dashboard = () => {
   const { userData, logout } = useAuth();
   const [allergens, setAllergens] = useState([]);
+  const [name, setName] = useState([]);
   const [updateKey, setUpdateKey] = useState(0); // Состояние для обновления карты
   const { cafeData, loading, error } = useGetCafeData(); // Получаем данные кафе с помощью хука
   const { userInfo, loading: userLoading, error: userError } = useGetUserInfo(); // Получаем данные пользователя с помощью хука
 
   useEffect(() => {
     if (userInfo) {
+      setName(userInfo.full_name);
       setAllergens(userInfo.allergies); // Устанавливаем аллергены пользователя
     }
   }, [userInfo]);
@@ -34,15 +36,11 @@ const Dashboard = () => {
         <Flex vertical gap="small" align="center">
           <Avatar size={80} icon={<UserOutlined />} className="avatar" />
           <Typography.Title level={2} strong className="username">
-            {userData.name}
+            {name}
           </Typography.Title>
           <Typography.Text type="secondary" strong>
             Почта: {userData.email}
           </Typography.Text>
-          <Typography.Text type="secondary">
-            Роль: {userData.role}
-          </Typography.Text>
-          
           <Link to="/changepassword" className="link-button">
             <Button size="large" type="primary" className="profile-btn">
               Сменить пароль
@@ -66,7 +64,7 @@ const Dashboard = () => {
           <Button 
             size="large" 
             type="primary" 
-            className="profile-btn"
+            className="profile-btn logout-btn"
             onClick={handleLogout}
           >
             Выход
