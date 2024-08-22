@@ -37,7 +37,7 @@ const App = () => {
         />
         <Route 
           path='/userinfo' 
-          element={isAuthenticated ? <UserInfo /> : <Login />} // Новый маршрут для UserInfo
+          element={isAuthenticated ? <UserInfo /> : <Login />} 
         />
       </Routes>
     </Router>
