@@ -32,7 +32,7 @@ const MapComponent = ({ cafeData, allergens, updateKey }) => {
 
   return (
     <YMaps>
-      <Map width="950px" height="750px" state={mapState} modules={["control.ZoomControl", "control.FullscreenControl"]}>
+      <Map className="yandex-map"state={mapState} modules={["control.ZoomControl", "control.FullscreenControl"]}>
         <ObjectManager 
           key={updateKey} // Используем ключ для принудительного обновления
           options={{ clusterize: true, gridSize: 32 }} 

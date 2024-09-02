@@ -74,7 +74,7 @@ const Dashboard = () => {
         </Flex>
       </Card>
 
-      <Card className="yandex-map" style={{ marginTop: '16px' }}>
+      <Card className="map-container" style={{ marginTop: '0%' }}>
         {loading ? (
           <Typography.Text>Загрузка карты...</Typography.Text>
         ) : error ? (
