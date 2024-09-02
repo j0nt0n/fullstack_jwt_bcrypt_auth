@@ -12,7 +12,7 @@ const useChangePassword = () => {
             setError(null);
             setLoading(true);
 
-            const res = await fetch("http://localhost:3000/api/auth/change", {
+            const res = await fetch("http://192.168.89.181:3000/api/auth/change", {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

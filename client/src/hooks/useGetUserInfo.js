@@ -22,7 +22,7 @@ const useGetUserInfo = () => {
       }
 
       // Выполняем запрос к API для получения данных пользователя
-      const res = await fetch('http://localhost:3000/api/auth/getinfo', {
+      const res = await fetch('http://192.168.89.181:3000/api/getinfo', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`, // Передаем токен в заголовке запроса

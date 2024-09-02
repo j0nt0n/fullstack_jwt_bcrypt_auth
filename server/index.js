@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./config/db');
 const authRoute = require('./routes/authRoute');
+const infoRoute = require('./routes/infoRoute');
 const app = express();
 
 require('dotenv').config();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // 2) роутеры
 app.use('/api/auth', authRoute);
+app.use('/api/', infoRoute);
 
 // 3) бд
 pool.query('SELECT NOW()', (err, res) => {
@@ -37,6 +39,6 @@ app.use((err, req, res, next) => {
 
 // 5) сервер
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on http://0.0.0.0:${PORT}`);
 });

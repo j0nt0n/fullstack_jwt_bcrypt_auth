@@ -21,7 +21,7 @@ const useUpdateUserInfo = () => {
       }
 
       // Выполняем запрос к API для обновления данных пользователя
-      const res = await fetch('http://localhost:3000/api/auth/updinfo', {
+      const res = await fetch('http://192.168.89.181:3000/api/updinfo', {
         method: 'PATCH', // Используем метод PATCH для обновления данных
         headers: {
           'Content-Type': 'application/json',
