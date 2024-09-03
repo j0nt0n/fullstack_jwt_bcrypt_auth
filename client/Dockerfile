@@ -1,21 +1,20 @@
-# Use a Node.js base image
-FROM node:alpine as build
+# Используем официальный Node.js образ как базовый
+FROM node:18
 
-# Copy package.json and install dependencies
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем package.json и package-lock.json (если есть)
 COPY package*.json ./
+
+# Устанавливаем зависимости
 RUN npm install
 
-# Copy the rest of the application
+# Копируем весь исходный код в контейнер
 COPY . .
 
-# Build the app for production
-RUN npm run build
+# Открываем порт, на котором работает сервер разработки
+EXPOSE 5173
 
-# Use nginx to serve the static files
-FROM nginx:stable-alpine
-
-# Copy built files from the previous stage
-EXPOSE 8005
-
-# Start nginx
-CMD ["npm", "Start", "dev"]
+# Запускаем сервер разработки
+CMD ["npm", "run", "dev", "--", "--host"]
