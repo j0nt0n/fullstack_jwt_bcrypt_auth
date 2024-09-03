@@ -2,7 +2,7 @@ networks:
   dev:
 
 services:
-  nginx:
+  nginx1:
     image: nginx:stable-alpine
     ports:
       - "80:80"
