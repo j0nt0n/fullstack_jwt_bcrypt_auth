@@ -15,7 +15,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 
 # Copy built files from the previous stage
-EXPOSE 8000
+EXPOSE 8005
 
 # Start nginx
 CMD ["npm", "Start", "dev"]
