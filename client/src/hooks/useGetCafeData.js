@@ -12,7 +12,7 @@ const useGetCafeData = () => {
       setError(null);
 
       // Выполняем запрос к вашему API для получения данных
-      const res = await fetch('http://192.168.89.181:3000/api/getallrest', { method: 'GET' });
+      const res = await fetch('http://localhost:3000/api/getallrest', { method: 'GET' });
 
       // Обрабатываем ответ от сервера
       const data = await res.json();
