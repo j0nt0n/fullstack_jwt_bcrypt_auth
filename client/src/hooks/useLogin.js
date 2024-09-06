@@ -11,7 +11,7 @@ const useLogin = () => {
         try{
             setError(null);
             setLoading(true);
-            const res = await fetch("http://zdorovyeitochka.ru/api/auth/login", {
+            const res = await fetch("https://zdorovyeitochka.ru/api/auth/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
