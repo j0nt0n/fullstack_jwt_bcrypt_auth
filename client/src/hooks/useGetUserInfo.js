@@ -22,7 +22,7 @@ const useGetUserInfo = () => {
       }
 
       // Выполняем запрос к API для получения данных пользователя
-      const res = await fetch('https://zdorovyeitochka.ru/api/getinfo', {
+      const res = await fetch('zdorovyeitochka.ru/api/getinfo', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`, // Передаем токен в заголовке запроса

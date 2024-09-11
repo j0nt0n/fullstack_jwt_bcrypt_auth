@@ -21,7 +21,7 @@ const useUpdateUserInfo = () => {
       }
 
       // Выполняем запрос к API для обновления данных пользователя
-      const res = await fetch('https://zdorovyeitochka.ru/api/updinfo', {
+      const res = await fetch('zdorovyeitochka.ru/api/updinfo', {
         method: 'PATCH', // Используем метод PATCH для обновления данных
         headers: {
           'Content-Type': 'application/json',
