@@ -14,7 +14,7 @@ const useRegUserInfo = () => {
             setError(null);
             setLoading(true);
 
-            const res = await fetch("zdorovyeitochka.ru/api/reginfo", {
+            const res = await fetch("api/reginfo", {
                 method: 'POST', // Используем метод POST для отправки данных
                 headers: {
                     'Content-Type': 'application/json',

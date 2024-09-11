@@ -12,7 +12,7 @@ const useGetCafeData = () => {
       setError(null);
 
       // Выполняем запрос к вашему API для получения данных
-      const res = await fetch('zdorovyeitochka.ru/api/getallrest', { method: 'GET' });
+      const res = await fetch('api/getallrest', { method: 'GET' });
 
       // Обрабатываем ответ от сервера
       const data = await res.json();

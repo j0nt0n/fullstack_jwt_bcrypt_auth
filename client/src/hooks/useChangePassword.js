@@ -12,7 +12,7 @@ const useChangePassword = () => {
             setError(null);
             setLoading(true);
 
-            const res = await fetch("zdorovyeitochka.ru/api/auth/change", {
+            const res = await fetch("api/auth/change", {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
