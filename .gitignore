@@ -126,3 +126,4 @@ dist
 .DS_Store 
 
 # production build output
+.dist/ 
