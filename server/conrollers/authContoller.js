@@ -69,7 +69,7 @@ exports.verify = async (req, res, next) => {
     await pool.query('UPDATE userauth SET is_verified = $1 WHERE _id = $2', [true, userId]); 
 
     // Отправляем успешный ответ
-    res.status(200).json({ message: 'Ваш аккаунт успешно подтвержден!' });
+    res.redirect(`/reginfo?token=${token}`);
   } catch (error) {
     next(error); // Обработка ошибок
   }

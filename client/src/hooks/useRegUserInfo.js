@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { message } from 'antd';
-import { useAuth } from '../contexts/AuthContext.jsx';
 
-const useRegUserInfo = () => {
-    const { token } = useAuth(); // Предполагается, что токен пользователя доступен через контекст
+const useRegUserInfo = (token) => { // Принимаем токен как аргумент
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -15,10 +13,10 @@ const useRegUserInfo = () => {
             setLoading(true);
 
             const res = await fetch("api/reginfo", {
-                method: 'POST', // Используем метод POST для отправки данных
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`, // Передаем токен пользователя в заголовке
+                    'Authorization': `Bearer ${token}`, // Используем токен
                 },
                 body: JSON.stringify({
                     full_name,
@@ -26,27 +24,28 @@ const useRegUserInfo = () => {
                     age,
                     gender,
                     allergies
-                }), // Преобразуем данные пользователя в формат JSON для отправки на сервер
+                }),
             });
 
-            const data = await res.json(); // Обрабатываем ответ от сервера
+            const data = await res.json();
 
             if (res.status === 201) {
-                message.success(data.message); // Сообщаем об успешной отправке данных
-            } else if (res.status === 400 || res.status === 404 || res.status === 409) {
-                setError(data.message);
-                message.error(data.message); // Выводим ошибку, если сервер вернул соответствующий статус
+                message.success(data.message);
+                return true;
             } else {
-                message.error('Не удалось отправить данные'); // Сообщение об общей ошибке
+                setError(data.message);
+                message.error(data.message);
+                return false;
             }
         } catch (error) {
-            message.error('Произошла ошибка: ' + error.message); // Обрабатываем ошибки сети и другие исключения
+            message.error('Произошла ошибка: ' + error.message);
+            return false;
         } finally {
-            setLoading(false); // Сбрасываем состояние загрузки
+            setLoading(false);
         }
     };
 
-    return { loading, error, submitUserInfo }; // Возвращаем функцию и состояния
+    return { loading, error, submitUserInfo };
 };
 
 export default useRegUserInfo;

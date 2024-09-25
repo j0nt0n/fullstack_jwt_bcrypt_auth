@@ -1,31 +1,29 @@
 import React from 'react';
 import { Card, Flex, Form, Input, Typography, Button, Alert, Spin } from 'antd';
-import { Link, useNavigate } from 'react-router-dom'; // Импортируем useNavigate
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import registerImage from '../assets/register.png';
-import useRegUserInfo from '../hooks/useRegUserInfo'; // Хук для отправки данных пользователя
+import useRegUserInfo from '../hooks/useRegUserInfo';
 
 const RegisterUserInfo = () => {
-  const { error, loading, submitUserInfo } = useRegUserInfo();
+  const location = useLocation(); // Используем useLocation для получения информации из URL
+  const query = new URLSearchParams(location.search); // Создаем объект URLSearchParams для извлечения параметров
+  const token = query.get('token'); // Получаем токен из URL
+  const { error, loading, submitUserInfo } = useRegUserInfo(token); // Передаем токен в хук
   const [form] = Form.useForm();
-  const navigate = useNavigate(); // Инициализируем useNavigate
+  const navigate = useNavigate();
 
   const handleRegisterUserInfo = async (values) => {
-    // Преобразование строки аллергий в массив, удаление пробелов и приведение к нижнему регистру
     const allergiesArray = values.allergies
-      ? values.allergies
-          .split(',')
-          .map(allergy => allergy.trim().toLowerCase())
+      ? values.allergies.split(',').map(allergy => allergy.trim().toLowerCase())
       : 'нету'; 
 
     const userInfo = { ...values, allergies: allergiesArray };
-    
-    try {
-      await submitUserInfo(userInfo); // Отправляем данные формы
-      
+
+    const isSuccess = await submitUserInfo(userInfo); // Получаем статус успешной отправки данных
+
+    if (isSuccess) {
       form.resetFields(); // Очистка полей формы после успешной регистрации
       navigate('/dashboard'); // Перенаправляем на дашборд после успешной регистрации
-    } catch (error) {
-      console.error("Ошибка при отправке данных пользователя:", error);
     }
   };
 

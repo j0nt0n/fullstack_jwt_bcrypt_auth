@@ -3,7 +3,7 @@ require('dotenv').config();
 
 // Функция для отправки письма с подтверждением
 async function sendVerificationEmail(user, token) {
-  const verificationLink = `http://localhost:3000/api/auth/verify/${token}`;
+  const verificationLink = `http://zdorovyeitochka.ru/api/auth/verify/${token}`;
 
   // Настройка транспорта с использованием SMTP вашего почтового сервера
   const transporter = nodemailer.createTransport({

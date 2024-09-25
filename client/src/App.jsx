@@ -21,11 +21,11 @@ const App = () => {
         />
         <Route 
           path='/signup' 
-          element={!isAuthenticated ? <Register /> : <Navigate to='/reginfo' />}
+          element={!isAuthenticated ? <Register /> : <Login />}
         />
         <Route 
           path='/reginfo' 
-          element={isAuthenticated ? <RegUserInfo /> : <Login />}
+          element={!isAuthenticated ? <RegUserInfo /> : <Login />}
         />
         <Route 
           path='/changepassword' 

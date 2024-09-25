@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { message } from "antd";
-import { useAuth } from "../contexts/AuthContext.jsx";
 
 const useSignup = () => {
-    const {login} = useAuth();
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(null);
 
     const registerUser = async (values) => {
-        if(values.password !== values.passwordConfirm){
-            return setError("Пароли не должны совпадать");
+        // Проверка, что пароли совпадают
+        if (values.password !== values.passwordConfirm) {
+            return setError("Пароли должны совпадать");
         }
 
-        try{
+        try {
             setError(null);
             setLoading(true);
+
+            // Отправка данных на сервер
             const res = await fetch("api/auth/signup", {
                 method: 'POST',
                 headers: {
@@ -25,24 +26,24 @@ const useSignup = () => {
 
             const data = await res.json();
 
-            if(res.status === 201){
-                message.success(data.message);
-                login(data.token, data.user);
+            // Успешная регистрация
+            if (res.status === 201) {
+                message.success("Регистрация успешна! Проверьте вашу почту для подтверждения.");
             }
-            else if(res.status === 400){
+            // Ошибка при регистрации (например, пользователь уже существует)
+            else if (res.status === 400) {
                 setError(data.message);
-            }        
-            else{
+            } else {
                 message.error("Не удалось выполнить регистрацию");
             }
-        }catch (error){
-            message.error(error);
-        }finally {
+        } catch (error) {
+            message.error("Ошибка: " + error.message);
+        } finally {
             setLoading(false);
         }
     };
 
-    return{ loading, error, registerUser };
+    return { loading, error, registerUser };
 };
 
 export default useSignup;
