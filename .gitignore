@@ -127,3 +127,6 @@ dist
 
 # production build output
 .dist/ 
+
+# dotenv environment variable files
+.env
