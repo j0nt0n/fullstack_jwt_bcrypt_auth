@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // 2) роутеры
-app.use('/api/auth', authRoute);
+app.use('/api/auth/', authRoute);
 app.use('/api/', infoRoute);
 
 // 3) бд

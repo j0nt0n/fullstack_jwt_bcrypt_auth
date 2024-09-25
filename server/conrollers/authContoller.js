@@ -2,12 +2,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/db');
 const createError = require('../utils/appError');
-
+const { generateVerificationToken } = require('../utils/token');
+const { sendVerificationEmail } = require('../utils/email');
 
 // регистрация пользователя
 exports.signup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+
     // Проверка, существует ли пользователь с данным email
     const userCheck = await pool.query('SELECT * FROM userauth WHERE email = $1', [email]);
 
@@ -20,29 +22,56 @@ exports.signup = async (req, res, next) => {
 
     // Вставляем нового пользователя в таблицу userauth
     const result = await pool.query(
-      'INSERT INTO userauth (email, password) VALUES ($1, $2) RETURNING *',
-      [email, hashedPassword]
+      'INSERT INTO userauth (email, password, is_verified) VALUES ($1, $2, $3) RETURNING *',
+      [email, hashedPassword, false]  // Указываем, что пользователь не подтвержден
     );
 
     const newUser = result.rows[0];
 
-    // Генерация JWT токена для пользователя
-    const token = jwt.sign({ id: newUser._id }, 'secretkey123', {
-      expiresIn: '90d',  // Срок действия токена
-    });
+    // Генерация токена для подтверждения почты
+    const verificationToken = generateVerificationToken(newUser._id);
 
-    // Отправляем успешный ответ с токеном и данными пользователя
+    // Отправка письма с подтверждением почты
+    await sendVerificationEmail(newUser, verificationToken);
+
+    // Возвращаем ответ без JWT, так как учетная запись еще не подтверждена
     res.status(201).json({
       status: 'success',
-      message: 'Регистрация прошла успешно',
-      token,
-      user: {
-        id: newUser._id,
-        email: newUser.email
-      },
+      message: 'Регистрация прошла успешно. Проверьте вашу почту для подтверждения.',
     });
   } catch (error) {
     next(error);  // Обработка ошибок
+  }
+};
+
+// Верификация пользователя через токен
+exports.verify = async (req, res, next) => {
+  const { token } = req.params; // Получаем токен из URL
+
+  try {
+    // Проверяем токен
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id; // Исправлено на decoded.id, так как в полезной нагрузке id
+
+    // Проверяем, существует ли пользователь
+    const user = await pool.query('SELECT * FROM userauth WHERE _id = $1', [userId]); 
+
+    if (user.rows.length === 0) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    }
+
+    // Проверяем, подтвержден ли уже аккаунт
+    if (user.rows[0].is_verified) {
+      return res.status(400).json({ message: 'Аккаунт уже подтвержден' });
+    }
+
+    // Обновляем статус пользователя, помечая его как подтвержденного
+    await pool.query('UPDATE userauth SET is_verified = $1 WHERE _id = $2', [true, userId]); 
+
+    // Отправляем успешный ответ
+    res.status(200).json({ message: 'Ваш аккаунт успешно подтвержден!' });
+  } catch (error) {
+    next(error); // Обработка ошибок
   }
 };
 
@@ -60,6 +89,17 @@ exports.login = async (req, res, next) => {
       return next(new createError('Пользователь не найден!', 404));
     }
 
+    // Проверяем, подтвержден ли аккаунт
+    if (!user.is_verified) {
+      // Генерация токена для подтверждения
+      const verificationToken = generateVerificationToken(user._id);
+    
+      // Отправка письма с подтверждением почты
+      await sendVerificationEmail(user, verificationToken);
+    
+      return next(new createError('Ваш аккаунт не подтвержден. Мы отправили вам письмо для подтверждения.', 403));
+    }
+
     // Проверка правильности пароля
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -69,7 +109,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Генерация JWT токена для пользователя
-    const token = jwt.sign({ id: user._id }, 'secretkey123', {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '90d',
     });
 
@@ -123,7 +163,7 @@ exports.changePassword = async (req, res, next) => {
     await pool.query('UPDATE userauth SET password = $1 WHERE _id = $2', [hashedNewPassword, user._id]);
 
     // Генерация нового JWT токена для пользователя
-    const token = jwt.sign({ id: user._id }, 'secretkey123', {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: '90d',
     });
 

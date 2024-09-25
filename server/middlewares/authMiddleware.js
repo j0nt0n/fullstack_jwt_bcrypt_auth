@@ -15,7 +15,7 @@ const protect = async (req, res, next) => {
       }
   
       // Верификация токена
-      const decoded = jwt.verify(token, 'secretkey123'); // Используйте ваш секретный ключ
+      const decoded = jwt.verify(token, process.env.JWT_SECRET); // Используйте ваш секретный ключ
   
       // Поиск пользователя по ID, полученному из токена
       const userResult = await pool.query('SELECT * FROM userauth WHERE _id = $1', [decoded.id]);
