@@ -7,7 +7,7 @@ async function sendVerificationEmail(user, token) {
 
   // Настройка транспорта с использованием SMTP вашего почтового сервера
   const transporter = nodemailer.createTransport({
-    host: 'mail.zdorovyeitochka.ru', // Ваш домен почтового сервера
+    host: '79.137.202.144:587', // Ваш домен почтового сервера
     port: 587, // Стандартный порт для SMTP с TLS
     secure: false, // false для STARTTLS (рекомендуется использовать STARTTLS)
     auth: {
