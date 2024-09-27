@@ -36,32 +36,42 @@ exports.regUserInfo = async (req, res, next) => {
         // Если список аллергий пуст, записываем "Нет аллергий"
         let allergyList = allergies && allergies.length > 0 ? allergies : ['Нет аллергий'];
 
-        // Обработка каждой аллергии
-        for (let allergy of allergyList) {
+        // Обработка аллергий
+        for (let allergy of allergies) {
             // Преобразуем аллерген в нижний регистр
             let lowercaseAllergy = allergy.toLowerCase();
-            
-            // Вставляем новый аллерген в таблицу allergy и получаем его ID
-            let insertResult = await pool.query(
-                'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+            // Проверяем, существует ли уже аллераген в базе данных
+            let allergyResult = await pool.query(
+                'SELECT _id FROM allergy WHERE name = $1',
                 [lowercaseAllergy]
             );
-            let allergyId = insertResult.rows[0]._id;
+              
+            let allergyId;
+            if (allergyResult.rows.length > 0) {
+                // Если существует, используем существующий ID
+                allergyId = allergyResult.rows[0]._id;
+            } else {
+                // Если не существует, добавляем новый аллерген
+                let insertResult = await pool.query(
+                    'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+                    [lowercaseAllergy]
+                );
+                allergyId = insertResult.rows[0]._id;
+            }
 
-            // Связываем пользователя с аллергеном
+            // Создаем связь между пользователем и аллергеном
             await pool.query(
                 'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
                 [userId, allergyId]
             );
         }
-      
         // Ответ с успешной регистрацией
         res.status(201).json({
           status: 'success',
           message: 'Информация о пользователе успешно внесена',
         });
     } catch (error) {
-      next(error);
+        next(error);
     }
 };
 
