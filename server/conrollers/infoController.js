@@ -34,7 +34,7 @@ exports.regUserInfo = async (req, res, next) => {
             const allergyIds = [];
         }
       
-        // Обработка аллергий
+        // Обработка новых аллергий
         // Если allergies пустое, удаляем все связанные записи
         if (!allergies || allergies.length === 0) {
             await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
@@ -45,10 +45,12 @@ exports.regUserInfo = async (req, res, next) => {
 
             // Обработка аллергий
             for (let allergy of allergies) {
+                // Преобразуем аллерген в нижний регистр
+                let lowercaseAllergy = allergy.toLowerCase();
                 // Проверяем, существует ли уже аллераген в базе данных
                 let allergyResult = await pool.query(
                     'SELECT _id FROM allergy WHERE name = $1',
-                    [allergy]
+                    [lowercaseAllergy]
                 );
               
                 let allergyId;
@@ -59,7 +61,7 @@ exports.regUserInfo = async (req, res, next) => {
                     // Если не существует, добавляем новый аллерген
                     let insertResult = await pool.query(
                         'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
-                        [allergy]
+                        [lowercaseAllergy]
                     );
                     allergyId = insertResult.rows[0]._id;
                 }
