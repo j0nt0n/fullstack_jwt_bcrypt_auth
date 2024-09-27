@@ -75,6 +75,12 @@ const Register = () => {
             )}
 
             <Form.Item>
+              <Typography.Text type="secondary">
+                На вашу почту будет отправлено письмо с подтверждением.
+              </Typography.Text>
+            </Form.Item>
+
+            <Form.Item>
               <Button 
                 type={`${loading ? '' : 'primary'}`} 
                 htmlType="submit" 
@@ -84,11 +90,7 @@ const Register = () => {
                 {loading ? <Spin /> : 'Создать аккаунт'}
               </Button>
             </Form.Item>
-            <Form.Item>
-              <Typography.Text type="secondary">
-                На вашу почту будет отправлено письмо с подтверждением.
-              </Typography.Text>
-            </Form.Item>
+
             <Form.Item>
               <Link to="/">
                 <Button size="large" className="btn">
