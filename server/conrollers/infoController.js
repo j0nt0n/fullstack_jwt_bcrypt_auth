@@ -33,50 +33,26 @@ exports.regUserInfo = async (req, res, next) => {
             }
         }
       
-        // Обработка новых аллергий
-        // Если allergies пустое, удаляем все связанные записи
-        if (!allergies || allergies.length === 0) {
-            let allergyId;
-            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+        // Если список аллергий пуст, записываем "Нет аллергий"
+        let allergyList = allergies && allergies.length > 0 ? allergies : ['Нет аллергий'];
+
+        // Обработка каждой аллергии
+        for (let allergy of allergyList) {
+            // Преобразуем аллерген в нижний регистр
+            let lowercaseAllergy = allergy.toLowerCase();
+            
+            // Вставляем новый аллерген в таблицу allergy и получаем его ID
             let insertResult = await pool.query(
                 'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
-                [allergies]
+                [lowercaseAllergy]
             );
-            allergyId = insertResult.rows[0]._id;
-        } else {
-            // Если allergies не пустое, обновляем записи аллергий
-            // Сначала удаляем старые записи аллергий
-            await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+            let allergyId = insertResult.rows[0]._id;
 
-            // Обработка аллергий
-            for (let allergy of allergies) {
-                // Преобразуем аллерген в нижний регистр
-                let lowercaseAllergy = allergy.toLowerCase();
-                // Проверяем, существует ли уже аллераген в базе данных
-                let allergyResult = await pool.query(
-                    'SELECT _id FROM allergy WHERE name = $1',
-                    [lowercaseAllergy]
-                );
-              
-                let allergyId;
-                if (allergyResult.rows.length > 0) {
-                    // Если существует, используем существующий ID
-                    allergyId = allergyResult.rows[0]._id;
-                } else {
-                    // Если не существует, добавляем новый аллерген
-                    let insertResult = await pool.query(
-                        'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
-                        [lowercaseAllergy]
-                    );
-                    allergyId = insertResult.rows[0]._id;
-                }
-            }
-            // Создаем связь между пользователем и аллергеном
+            // Связываем пользователя с аллергеном
             await pool.query(
                 'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
                 [userId, allergyId]
             );
-            
         }
       
         // Ответ с успешной регистрацией
