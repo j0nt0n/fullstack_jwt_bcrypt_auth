@@ -31,13 +31,17 @@ exports.regUserInfo = async (req, res, next) => {
             if (err.code === '23505') { // Код ошибки для уникального ограничения
                 return next(new createError('Пользователь с такими данными уже существует!', 409));
             }
-            const allergyIds = [];
         }
       
         // Обработка новых аллергий
         // Если allergies пустое, удаляем все связанные записи
         if (!allergies || allergies.length === 0) {
             await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
+            let insertResult = await pool.query(
+                'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
+                [allergies]
+            );
+            allergyId = insertResult.rows[0]._id;
         } else {
             // Если allergies не пустое, обновляем записи аллергий
             // Сначала удаляем старые записи аллергий
@@ -65,13 +69,13 @@ exports.regUserInfo = async (req, res, next) => {
                     );
                     allergyId = insertResult.rows[0]._id;
                 }
-
-                // Создаем связь между пользователем и аллергеном
-                await pool.query(
-                    'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
-                    [userId, allergyId]
-                );
             }
+            // Создаем связь между пользователем и аллергеном
+            await pool.query(
+                'INSERT INTO userallergy (user_id, allergy_id) VALUES ($1, $2)',
+                [userId, allergyId]
+            );
+            
         }
       
         // Ответ с успешной регистрацией
