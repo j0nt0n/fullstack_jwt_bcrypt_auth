@@ -15,7 +15,7 @@ const RegisterUserInfo = () => {
   const handleRegisterUserInfo = async (values) => {
     const allergiesArray = values.allergies
       ? values.allergies.split(',').map(allergy => allergy.trim().toLowerCase())
-      : 'нету'; 
+      : ''; 
 
     const userInfo = { ...values, allergies: allergiesArray };
 
