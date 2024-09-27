@@ -36,6 +36,7 @@ exports.regUserInfo = async (req, res, next) => {
         // Обработка новых аллергий
         // Если allergies пустое, удаляем все связанные записи
         if (!allergies || allergies.length === 0) {
+            let allergyId;
             await pool.query('DELETE FROM userallergy WHERE user_id = $1', [userId]);
             let insertResult = await pool.query(
                 'INSERT INTO allergy (name) VALUES ($1) RETURNING _id',
